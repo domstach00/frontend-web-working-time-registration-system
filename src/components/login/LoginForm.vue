@@ -2,7 +2,7 @@
   <div id="LoginForm" class="small-container">
     <h5>Zaloguj</h5>
     <form @submit.prevent="handleSubmit">
-      <label>Login</label>
+      <label>Login </label>
       <input
         v-model="userAccount.login"
         type="text"
@@ -11,7 +11,7 @@
         @keypress="clearStatus"
       />
       <br/><br/>
-      <label>Hasło</label>
+      <label>Hasło </label>
       <input
           v-model="userAccount.password"
           type="password"
@@ -51,14 +51,11 @@ export default {
     handleSubmit() {
       this.submiting = true
       this.clearStatus()
-
       if (this.invalidLogin || this.invalidPassword) {
         this.error = true
         return
       }
-
       // this.$emit()
-
       this.error = false
       this.success = true
       this.submiting = false
@@ -86,15 +83,13 @@ form {
 [class*='-message'] {
   font-weight: 500;
 }
-
 .error-message {
   color: #d33c40;
 }
-
 .success-message {
   color: #32a95d;
 }
-
-
-
+.small-container h5 {
+  font-size: 20px
+}
 </style>

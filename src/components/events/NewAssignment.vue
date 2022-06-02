@@ -2,20 +2,20 @@
   <div id="NewAssignment" class="small-container">
     <h5>Add new assignment</h5>
     <form @submit.prevent="handleSubmit">
-      <label>Description</label>
+      <label>Description </label>
       <input
         v-model="assignment.description"
         type="text"
       >
       <br/><br/>
-      <label>Start date</label>
+      <label>Start date </label>
       <input
         v-model="assignment.startDate"
         type="date"
         :class="{ 'has-error': submiting && invalidDate }"
       >
       <br/><br/>
-      <label>End date</label>
+      <label>End date </label>
       <input
         v-model="assignment.endDate"
         type="date"
@@ -23,7 +23,7 @@
       >
       <br/><br/>
 
-      <label>Project group</label>
+      <label>Project group </label>
       <select v-model="assignment.projectGroup">
         <option v-for="option in selectOptions" :value="option.id" v-bind:key="option.id">
           {{option.group}}
@@ -69,12 +69,10 @@ export default {
     handleSubmit()  {
       this.submiting = true
       this.clearStatus()
-
       if (this.invalidDate || this.invalidProjectGroup) {
         this.error = true
         return
       }
-
       this.error = false
       this.success = true
       this.submiting = false
@@ -88,16 +86,13 @@ export default {
     invalidDate() {
       const firstDate = new Date(this.assignment.startDate)
       const sencondDate = new Date(this.assignment.endDate);
-
       return firstDate.getDate() >= sencondDate.getDate()
     },
     invalidProjectGroup() {
       return this.assignment.projectGroup === 0
     },
   },
-
 }
-
 </script>
 
 <style scoped>
@@ -107,12 +102,13 @@ form {
 [class*='-message'] {
   font-weight: 500;
 }
-
 .error-message {
   color: #d33c40;
 }
-
 .success-message {
   color: #32a95d;
+}
+.small-container h5 {
+  font-size: 20px;
 }
 </style>

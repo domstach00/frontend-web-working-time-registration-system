@@ -25,7 +25,17 @@ const routes = [
     path: '/new-assignment',
     name: 'new assignment',
     component: () => import('../views/NewAssignmentView')
-  }
+  },
+  {
+    path: '/new-project-group',
+    name: 'new project group',
+    component: () => import('../views/NewProjectGroupView')
+  },
+  {
+    path: '/new-worker',
+    name: 'new worker',
+    component: () => import('../views/NewWorkerView')
+  },
 ]
 
 const router = createRouter({

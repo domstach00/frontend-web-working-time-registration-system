@@ -102,7 +102,7 @@ b { /* used for event dates/times */
   margin-right: 3px;
 }
 .demo-app {
-  display: flex;
+  /*display: flex;*/
   min-height: 100%;
   font-family: Arial, Helvetica Neue, Helvetica, sans-serif;
   font-size: 14px;

@@ -4,6 +4,8 @@
     <router-link to="/login" class="navi-bar">Login</router-link>
     <router-link to="/calendar" class="navi-bar">Calendar</router-link>
     <router-link to="/new-assignment" class="navi-bar">Add assignment</router-link>
+    <router-link to="/new-project-group" class="navi-bar">Add project group</router-link>
+    <router-link to="/new-worker" class="navi-bar">Add worker</router-link>
   </div>
   <router-view/>
 </template>

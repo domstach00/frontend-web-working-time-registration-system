@@ -1,72 +1,67 @@
 <template>
-  <div class="addNewProjectGroup">
-    <h3>Add new project group</h3>
-  </div>
-  <br/>
-  <form @submit.prevent="handleSubmit">
-    <div>
-      <label>Group name </label>
-      <input type="text" placeholder="name">
-    </div>
-    <br/>
-    <div>
+  <div id="NewAssignment" class="small-container">
+    <h5>Add new assignment</h5>
+    <form @submit.prevent="handleSubmit">
       <label>Description </label>
-      <input type="text" placeholder="desc">
-    </div>
-    <br/>
-    <div class="c">
-      <label>Project Manager </label>
-      <select v-model="projectGroup.projectManager">
-          <option v-for="option in managerOptions" :value="option.id" v-bind:key="option.id">
-            {{option.group}}
-          </option>
-      </select>
-    </div>
-    <br/>
-    <div class="d">
-      <label>Select </label>
-      <select v-model="projectGroup.projectWorkers">
-          <option v-for="option in selectOptions" :value="option.id" v-bind:key="option.id">
-            {{option.gr}}
-          </option>
-      </select>
-    </div>
-    <p v-if="error && submiting" class="error-message">
-          Incorrect details
-        </p>
-        <p v-else>
+      <input
+        v-model="assignment.description"
+        type="text"
+      >
+      <br/><br/>
+      <label>Start date </label>
+      <input
+        v-model="assignment.startDate"
+        type="date"
+        :class="{ 'has-error': submiting && invalidDate }"
+      >
+      <br/><br/>
+      <label>End date </label>
+      <input
+        v-model="assignment.endDate"
+        type="date"
+        :class="{ 'has-error': submiting && invalidDate }"
+      >
+      <br/><br/>
 
-        </p>
-        <p v-if="success" class="success-message">
-          Group added correctly
-        </p>
-        <button id="butt">Add group</button>
-  </form>
+      <label>Project group </label>
+      <select v-model="assignment.projectGroup">
+        <option v-for="option in selectOptions" :value="option.id" v-bind:key="option.id">
+          {{option.group}}
+        </option>
+      </select>
+      <p v-if="error && submiting" class="error-message">
+        Incorrect details
+      </p>
+      <p v-else>
+
+      </p>
+      <p v-if="success" class="success-message">
+        Task added correctly
+      </p>
+      <button id="butt">Add task</button>
+    </form>
+  </div>
+
 </template>
 
 <script>
 export default {
-  name: 'App',
+  name: "NewAssignment",
   data() {
-    return { 
+    return {
       submiting: false,
       error: false,
       success: false,
-      projectGroup: {
-        groupName: '',
+      assignment: {
         description: '',
-        projectManager: 0,
-        projectWorkers: 0
+        startDate: new Date().toISOString().slice(0,10),
+        endDate: new Date().toISOString().slice(0,10),
+        projectGroup: 0
       },
-      managerOptions: [
+      selectOptions: [
         {group: 'A', id: 1},
         {group: 'B', id: 2},
         {group: 'C', id: 3},
-      ],
-      selectOptions: [
-        {gr: 'A', id: 1},
-        {gr: 'B', id: 2},
-        {gr: 'C', id: 3},
       ]
     }
   },
@@ -74,7 +69,7 @@ export default {
     handleSubmit()  {
       this.submiting = true
       this.clearStatus()
-      if (this.invalidProjectManager || this.invalidProjectWorkers) {
+      if (this.invalidDate || this.invalidProjectGroup) {
         this.error = true
         return
       }
@@ -88,16 +83,16 @@ export default {
     },
   },
   computed: {
-    invalidProjectManager() {
-      return this.projectGroup.projectManager === 0
+    invalidDate() {
+      const firstDate = new Date(this.assignment.startDate)
+      const sencondDate = new Date(this.assignment.endDate);
+      return firstDate.getDate() >= sencondDate.getDate()
     },
-    invalidProjectWorkers() {
-      return this.projectGroup.projectWorkers === 0
-    }
-  }
-
+    invalidProjectGroup() {
+      return this.assignment.projectGroup === 0
+    },
+  },
 }
-
 </script>
 
 <style>
@@ -109,23 +104,24 @@ export default {
   color: #2c3e50;
   margin-top: 60px;
 }
-  .addNewProjectGroup {
-    font-weight: bold;
-  }
-  #butt {
-    font-size: 15px;
-  }
-
+  
   form {
     margin-bottom: 2rem;
   }
-
+  [class*='-message'] {
+    font-weight: 500;
+  }
   .error-message {
     color: #d33c40;
   }
   .success-message {
     color: #32a95d;
   }
-
+  .small-container h5 {
+    font-size: 20px;
+  }
+  #butt {
+    font-size: 15px;
+  }
 </style>
 

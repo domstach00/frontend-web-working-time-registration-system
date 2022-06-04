@@ -38,7 +38,7 @@
       <p v-if="success" class="success-message">
         Task added correctly
       </p>
-      <button>Add task</button>
+      <button id="butt">Add task</button>
     </form>
   </div>
 
@@ -96,6 +96,14 @@ export default {
 </script>
 
 <style scoped>
+#app {
+  font-family: Avenir, Helvetica, Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-align: left;
+  color: #2c3e50;
+  margin-top: 60px;
+}
 form {
   margin-bottom: 2rem;
 }
@@ -110,5 +118,8 @@ form {
 }
 .small-container h5 {
   font-size: 20px;
+}
+#butt {
+  font-size: 15px;
 }
 </style>

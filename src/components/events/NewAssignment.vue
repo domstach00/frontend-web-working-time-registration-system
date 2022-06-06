@@ -2,7 +2,7 @@
   <div id="NewAssignment" class="small-container">
     <h5>Add new assignment</h5>
     <form @submit.prevent="handleSubmit">
-      <label>Description </label>
+      <label>Title </label>
       <input
         v-model="assignment.description"
         type="text"
@@ -46,7 +46,7 @@
 
 <script>
 export default {
-  name: "NewAssignment",
+  firstName: "NewAssignment",
   data() {
     return {
       submiting: false,

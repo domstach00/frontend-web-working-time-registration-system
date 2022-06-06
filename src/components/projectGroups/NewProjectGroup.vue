@@ -5,32 +5,10 @@
   <br/>
   <form @submit.prevent="handleSubmit">
     <div>
-      <label>Group name </label>
-      <input type="text" placeholder="name">
+      <label>Project name </label>
+      <input type="text" placeholder="name" v-model="projectGroup.groupName">
     </div>
     <br/>
-    <div>
-      <label>Description </label>
-      <input type="text" placeholder="desc">
-    </div>
-    <br/>
-    <div class="c">
-      <label>Project Manager </label>
-      <select v-model="projectGroup.projectManager">
-          <option v-for="option in managerOptions" :value="option.id" v-bind:key="option.id">
-            {{option.group}}
-          </option>
-      </select>
-    </div>
-    <br/>
-    <div class="d">
-      <label>Select </label>
-      <select v-model="projectGroup.projectWorkers">
-          <option v-for="option in selectOptions" :value="option.id" v-bind:key="option.id">
-            {{option.gr}}
-          </option>
-      </select>
-    </div>
     <p v-if="error && submiting" class="error-message">
           Incorrect details
         </p>
@@ -40,13 +18,15 @@
         <p v-if="success" class="success-message">
           Group added correctly
         </p>
-        <button id="butt">Add group</button>
+        <button id="butt">Create group</button>
   </form>
 </template>
 
 <script>
+import axios from "axios";
+
 export default {
-  name: 'App',
+  firstName: 'App',
   data() {
     return { 
       submiting: false,
@@ -54,45 +34,48 @@ export default {
       success: false,
       projectGroup: {
         groupName: '',
-        description: '',
-        projectManager: 0,
-        projectWorkers: 0
       },
-      managerOptions: [
-        {group: 'A', id: 1},
-        {group: 'B', id: 2},
-        {group: 'C', id: 3},
-      ],
-      selectOptions: [
-        {gr: 'A', id: 1},
-        {gr: 'B', id: 2},
-        {gr: 'C', id: 3},
-      ]
     }
   },
   methods: {
     handleSubmit()  {
       this.submiting = true
       this.clearStatus()
-      if (this.invalidProjectManager || this.invalidProjectWorkers) {
+      if (this.invalidProjectName) {
         this.error = true
         return
       }
-      this.error = false
-      this.success = true
-      this.submiting = false
+      this.insertPG()
+      if (this.success) {
+        this.error = false
+        this.submiting = false
+      }
+      else {
+        this.error = false
+        this.submiting = false
+      }
     },
     clearStatus() {
       this.success = false
       this.error = false
     },
+    insertPG(){
+      axios({
+        method: 'post',
+        url: 'http://localhost:8090/api/v1/project-group',
+        data: {
+          projectName: this.projectGroup.groupName
+        }
+      }).then(() => {
+        this.success = true
+      }).catch(() => {
+        this.success = false
+      })
+    }
   },
   computed: {
-    invalidProjectManager() {
-      return this.projectGroup.projectManager === 0
-    },
-    invalidProjectWorkers() {
-      return this.projectGroup.projectWorkers === 0
+    invalidProjectName() {
+      return this.projectGroup.groupName === ''
     }
   }
 }

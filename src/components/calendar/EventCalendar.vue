@@ -18,7 +18,9 @@ import FullCalendar from '@fullcalendar/vue3'
 import dayGridPlugin from '@fullcalendar/daygrid'
 import timeGridPlugin from '@fullcalendar/timegrid'
 import interactionPlugin from '@fullcalendar/interaction'
-import { INITIAL_EVENTS, createEventId } from './event-utils'
+import axios from "axios";
+// import { , createEventId } from './event-utils'
+
 export default {
   components: {
     FullCalendar
@@ -37,7 +39,7 @@ export default {
           right: 'dayGridMonth'
         },
         initialView: 'dayGridMonth',
-        initialEvents: INITIAL_EVENTS,
+        initialEvents: [],
         editable: true,
         selectable: true,
         selectMirror: true,
@@ -55,32 +57,79 @@ export default {
       currentEvents: []
     }
   },
+  computed: {
+
+  },
   methods: {
     // handleWeekendsToggle() {
     //   this.calendarOptions.weekends = !this.calendarOptions.weekends
     // },
     handleDateSelect(selectInfo) {
-      let title = prompt('Please enter a new title for your event')
+      let title = prompt('Please enter a title for event')
       let calendarApi = selectInfo.view.calendar
       calendarApi.unselect() // clear date selection
       if (title) {
+        axios({
+          method: 'post',
+          url: 'http://localhost:8090/api/v1/event',
+          data: {
+            description: title,
+            startDate: selectInfo.startStr,
+            endDate: selectInfo.endStr
+          }
+        })
         calendarApi.addEvent({
-          id: createEventId(),
+          id: 6,
           title,
           start: selectInfo.startStr,
           end: selectInfo.endStr,
-          allDay: selectInfo.allDay
+          // allDay: selectInfo.allDay
         })
       }
     },
     handleEventClick(clickInfo) {
       if (confirm(`Are you sure you want to delete the event '${clickInfo.event.title}'`)) {
-        clickInfo.event.remove()
+        const isDeleted = axios.delete(`http://localhost:8090/api/v1/event?id='${clickInfo.event.title}'`)
+        if (isDeleted)
+          clickInfo.event.remove()
+
       }
+    },
+    renameKey( obj, oldKey, newKey ) {
+      obj[newKey] = obj[oldKey];
+      delete obj[oldKey];
     },
     handleEvents(events) {
       this.currentEvents = events
+    },
+    getEventsFromAPI() {
+      const resp = axios.get('http://localhost:8090/api/v1/event/all')
+      resp.then(response => {
+        for (let i =0; i < response.data.length; i++) {
+          this.renameKey(response.data[i], 'idE', 'id')
+          this.renameKey(response.data[i], 'startDate', 'start')
+          this.renameKey(response.data[i], 'endDate', 'end')
+          this.renameKey(response.data[i], 'description', 'title')
+        }
+        console.log(response.data)
+        this.calendarOptions.initialEvents = response.data
+      }).catch(err => {
+        console.log(err)
+      })
+        // var x = [{
+        //   id: 1,
+        //   start: '2022-06-06',
+        //   end: '2022-06-06',
+        //   title: 'dsaedadsa'
+        // }]
+
+      // console.log(model_event)
+      // this.calendarOptions.initialEvents = model_event
+      console.log(this.calendarOptions.initialEvents)
     }
+  },
+  mounted() {
+    this.getEventsFromAPI()
   }
 }
 </script>
@@ -102,8 +151,9 @@ b { /* used for event dates/times */
   margin-right: 3px;
 }
 .demo-app {
-  /*display: flex;*/
-  min-height: 100%;
+  display: block;
+  min-height: 30%;
+  max-height: 50%;
   font-family: Arial, Helvetica Neue, Helvetica, sans-serif;
   font-size: 14px;
 }

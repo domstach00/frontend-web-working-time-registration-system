@@ -7,7 +7,7 @@
 <script>
 import NewWorker from "@/components/users/NewWorker";
 export default {
-  name: "NewWorkerView",
+  firstName: "NewWorkerView",
   components: {NewWorker}
 }
 </script>

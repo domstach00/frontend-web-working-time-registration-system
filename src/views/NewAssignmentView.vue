@@ -5,7 +5,7 @@
 <script>
 import NewAssignment from "@/components/events/NewAssignment";
 export default {
-  name: "NewAssignmentView",
+  firstName: "NewAssignmentView",
   components: {NewAssignment}
 }
 </script>

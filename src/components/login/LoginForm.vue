@@ -34,8 +34,9 @@
 </template>
 
 <script>
+
 export default {
-  name: "LoginForm",
+  firstName: "LoginForm",
   data() {
     return {
       submiting: false,
@@ -48,17 +49,27 @@ export default {
     }
   },
   methods: {
-    handleSubmit() {
+    async handleSubmit() {
       this.submiting = true
       this.clearStatus()
       if (this.invalidLogin || this.invalidPassword) {
         this.error = true
         return
       }
-      // this.$emit()
-      this.error = false
-      this.success = true
-      this.submiting = false
+      try {
+        const response = await fetch('http://localhost:8090/api/v1/user/login', {
+          body: {
+            "email": this.userAccount.login,
+            "password": this.userAccount.password
+          }
+        })
+        const data = await response.json()
+
+        console.log(data)
+      } catch (error) {
+        console.log(error)
+      }
+
     },
     clearStatus() {
       this.success = false

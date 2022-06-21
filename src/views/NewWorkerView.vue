@@ -8,7 +8,10 @@
 import NewWorker from "@/components/users/NewWorker";
 export default {
   firstName: "NewWorkerView",
-  components: {NewWorker}
+  components: {NewWorker},
+  mounted() {
+
+  }
 }
 </script>
 

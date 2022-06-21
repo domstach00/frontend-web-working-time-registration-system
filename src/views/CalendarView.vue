@@ -1,8 +1,8 @@
 <template>
   <div id="calendar-view">
-    <EventCalendar id="cal"/>
+    <EventCalendar id="calId"/>
     <br/>
-    <Tasks/>
+    <Tasks id="tasksId"/>
   </div>
 </template>
 
@@ -17,11 +17,14 @@ export default {
 
 <style scoped>
 
-#calendar-view {
-  /*display: inline-flex;*/
+#calId {
+  padding: 50px;
+  width: 60%;
+  float: left;
 }
-#cal {
-  padding-left: 50px;
-  padding-right: 100px;
+
+#tasksId {
+  float: left;
+  width: 30%;
 }
 </style>

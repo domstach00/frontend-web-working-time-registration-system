@@ -1,48 +1,55 @@
 <template>
-  <div class="add-new-worker">
-    <h5>Add new worker</h5>
-  </div>
-  <br/>
-  <form @submit.prevent="handleSubmit">
-    <div>
-      <label>Name </label>
-      <input type="text" placeholder="name" v-model="user.firstName">
-    </div>
-    <br/>
-    <div>
-      <label>Surname </label>
-      <input type="text" placeholder="surname" v-model="user.lastName">
-    </div>
-    <br/>
-    <div>
-      <label>Email</label>
-      <input type="email" placeholder="email" v-model="user.email">
-    </div>
-    <br/>
-    <div class="c">
-      <label>Position </label>
-      <select v-model="user.fk_role">
-          <option v-for="option in positionOptions" :value="option.idU" v-bind:key="option.idU">
-            {{option.roleName}}
-          </option>
-      </select>
-    </div>
-    <br/>
-    <div>
-      <label>Tel </label>
-      <input type="tel" v-model="user.phoneNr">
-    </div>
-    <p v-if="error && submiting" class="error-message">
-          Incorrect details
-        </p>
-        <p v-else>
+  <div id="add-new-worker" class="div">
+    <h1>Add new worker</h1>
 
-        </p>
-        <p v-if="success" class="success-message">
-          Worker added correctly
-        </p>
-        <button id="butt">Add user</button>
-  </form>
+    <br/>
+      <form @submit.prevent="handleSubmit">
+      <div>
+        <label>Name </label>
+        <br/>
+        <input type="text" placeholder="name" v-model="user.firstName">
+      </div>
+      <br/>
+      <div>
+        <label>Surname </label>
+        <br/>
+        <input type="text" placeholder="surname" v-model="user.lastName">
+      </div>
+     <br/>
+      <div>
+        <label>Email</label>
+        <br/>
+        <input type="email" placeholder="email" v-model="user.email">
+      </div>
+      <br/>
+      <div class="c">
+        <label>Position </label>
+        <br/>
+        <select v-model="user.fk_role">
+          <option v-for="option in positionOptions" :value="option.idU" v-bind:key="option.idU">
+           {{option.roleName}}
+         </option>
+       </select>
+      </div>
+      <br/>
+     <div>
+        <label>Tel </label>
+       <br/>
+       <input type="tel" v-model="user.phoneNr">
+     </div>
+      <p v-if="error && submiting" class="error-message">
+       Incorrect details
+      </p>
+      <p v-else>
+
+      </p>
+      <p v-if="success" class="success-message">
+        Worker added correctly
+      </p>
+      <button id="butt" class="button">Add user</button>
+    </form>
+  </div>
+
 </template>
 
 <script>
@@ -132,18 +139,42 @@ export default {
 </script>
 
 <style>
+input, select {
+  width: 30%;
+  padding: 12px 20px;
+  margin: 8px 0;
+  display: inline-block;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box;
+}
+
+.button {
+  width: 20%;
+  background-color: #55c21e;
+  color: white;
+  padding: 14px 20px;
+  margin: 8px 0;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.div {
+  border-radius: 5px;
+  background-color: #f2f2f2;
+  padding: 20px;
+}
+
 #add-new-worker {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  text-align: left;
   color: #2c3e50;
   margin-top: 60px;
+  text-align: center;
 }
-#addNewWorker {
-    font-weight: bold;
-    font-size: 20px
-}
+
   #butt {
     font-size: 15px;
   }

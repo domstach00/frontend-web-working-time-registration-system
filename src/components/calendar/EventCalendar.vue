@@ -19,7 +19,6 @@ import dayGridPlugin from '@fullcalendar/daygrid'
 import timeGridPlugin from '@fullcalendar/timegrid'
 import interactionPlugin from '@fullcalendar/interaction'
 import axios from "axios";
-// import { , createEventId } from './event-utils'
 
 export default {
   components: {
@@ -48,11 +47,6 @@ export default {
         select: this.handleDateSelect,
         eventClick: this.handleEventClick,
         eventsSet: this.handleEvents
-        /* you can update a remote database when these fire:
-        eventAdd:
-        eventChange:
-        eventRemove:
-        */
       },
       currentEvents: []
     }
@@ -61,13 +55,25 @@ export default {
 
   },
   methods: {
-    // handleWeekendsToggle() {
-    //   this.calendarOptions.weekends = !this.calendarOptions.weekends
-    // },
     handleDateSelect(selectInfo) {
       let title = prompt('Please enter a title for event')
       let calendarApi = selectInfo.view.calendar
+      // let eventType = prompt("Type of event: A - assigment, O - Day off")
       calendarApi.unselect() // clear date selection
+      // if (title && eventType.toUpperCase() === "A") {
+      //   axios({
+      //     method: 'post',
+      //     url: 'http://localhost:8090/api/v1/event',
+      //     data: {
+      //       description: title,
+      //       startDate: selectInfo.startStr,
+      //       endDate: selectInfo.endStr
+      //     }
+      //   })
+      // }
+      // else if (title && eventType.toUpperCase() === "O") {
+      //   eventType.toUpperCase()
+      // }
       if (title) {
         axios({
           method: 'post',
@@ -79,11 +85,9 @@ export default {
           }
         })
         calendarApi.addEvent({
-          id: 6,
           title,
           start: selectInfo.startStr,
           end: selectInfo.endStr,
-          // allDay: selectInfo.allDay
         })
       }
     },
@@ -105,31 +109,53 @@ export default {
     getEventsFromAPI() {
       const resp = axios.get('http://localhost:8090/api/v1/event/all')
       resp.then(response => {
-        for (let i =0; i < response.data.length; i++) {
+        for (let i = 0; i < response.data.length; i++) {
           this.renameKey(response.data[i], 'idE', 'id')
           this.renameKey(response.data[i], 'startDate', 'start')
           this.renameKey(response.data[i], 'endDate', 'end')
           this.renameKey(response.data[i], 'description', 'title')
         }
-        console.log(response.data)
-        this.calendarOptions.initialEvents = response.data
+        const plainObject = {...response.data};
+        this.calendarOptions.initialEvents = plainObject// response.data
+        console.log("Plain")
+        console.log(plainObject)
+        return response
       }).catch(err => {
         console.log(err)
       })
-        // var x = [{
-        //   id: 1,
-        //   start: '2022-06-06',
-        //   end: '2022-06-06',
-        //   title: 'dsaedadsa'
-        // }]
-
-      // console.log(model_event)
-      // this.calendarOptions.initialEvents = model_event
+      console.log("Calendar:")
       console.log(this.calendarOptions.initialEvents)
+    },
+    setInitial(events) {
+      this.calendarOptions.initialEvents = {...events}
     }
   },
   mounted() {
-    this.getEventsFromAPI()
+    this.calendarOptions.initialEvents = {...this.calendarOptions.initialEvents}
+    console.log("MOUNTED")
+    console.log(this.calendarOptions.initialEvents)
+  },
+  created() {
+    const resp = axios.get('http://localhost:8090/api/v1/event/all')
+    resp.then(response => {
+      for (let i = 0; i < response.data.length; i++) {
+        this.renameKey(response.data[i], 'idE', 'id')
+        this.renameKey(response.data[i], 'startDate', 'start')
+        this.renameKey(response.data[i], 'endDate', 'end')
+        this.renameKey(response.data[i], 'description', 'title')
+      }
+      const plainObject = {...response.data};
+     this.calendarOptions.initialEvents = plainObject// response.data
+      this.currentEvents = plainObject
+      console.log("Plain")
+      console.log(plainObject)
+      console.log("Calendar:")
+      console.log(this.calendarOptions.initialEvents)
+    }).catch(err => {
+      console.log(err)
+    })
+    // console.log("Calendar:")
+    // console.log(this.calendarOptions.initialEvents)
   }
 }
 </script>

@@ -1,8 +1,8 @@
 <template>
-  <div>
-    <NewProjectGroup/>
-    <AssignUsers/>
-    <UsersInProject/>
+  <div id="projectPage">
+    <NewProjectGroup id="idNewProjectGroup"/>
+    <AssignUsers id="idAssignUser"/>
+    <UsersInProject id="idUsersInProject"/>
   </div>
 </template>
 
@@ -18,4 +18,20 @@ export default {
 
 <style scoped>
 
+
+#projectPage {
+  text-align: center;
+  display: inline;
+
+}
+
+#idNewProjectGroup {
+}
+
+#idAssignUser {
+}
+
+#idUsersInProject {
+
+}
 </style>

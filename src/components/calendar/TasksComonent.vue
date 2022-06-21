@@ -1,16 +1,13 @@
 <template>
   <div id="task-list">
     <div class="item">
-      <p>Assigments</p>
+      <h2 id="AssigmentsId">Assigments</h2>
     </div>
-<!--    <input type="text" placeholder="todo" v-model="newItem">-->
-<!--    <input type="date" placeholder="startDate" v-model="startDate">-->
-<!--    <input type="date" placeholder="endDate" v-model="endDate">-->
-<!--    <button @click="addItem">Add</button>-->
-    <div class="item" v-bind:class="{completed: item.completed}"
+    <div class="item" v-bind:class="{completed: item.isComplete}"
          v-for="item in items" v-bind:key="item.id">
-      <h2>{{ item.description + " " + item.startDate + " - " + item.endDate + " " + item.idA }}</h2>
-      <button v-if="(item.isComplete === 0)" @click="removeItem(item.idA)">Done</button>
+      <h2>{{ item.description}}</h2>
+      <p id="assigmentDate">{{item.startDate + " - " + item.endDate}}</p>
+      <button v-if="(item.isComplete === 0)" @click="removeItem(item.idA)" class="button">Done</button>
     </div>
   </div>
 </template>
@@ -56,7 +53,6 @@ export default {
   mounted() {
     axios.get('http://localhost:8090/api/v1/assigment/all').then(response => {
       this.items = response.data
-      console.log(response.data)
     })
   }
 }
@@ -71,6 +67,16 @@ export default {
   color: #2c3e50;
   margin-top: 60px;
 }
+
+#AssigmentsId {
+  text-align: center;
+  font-family: Avenir, sans-serif;
+}
+
+#assigmentDate {
+  text-align: center;
+}
+
 .item {
   border: 1px solid green;
   margin: 8px;
@@ -81,11 +87,23 @@ input {
   margin: 10px;
 }
 
-.iscomplete {
+.completed {
   opacity: 0.5;
 }
 
 .completed h2 {
   text-decoration: line-through;
+}
+
+.button {
+  width: 20%;
+  height: 5%;
+  background-color: #55c21e;
+  color: white;
+  padding: 14px 20px;
+  margin: 8px 0;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
 }
 </style>

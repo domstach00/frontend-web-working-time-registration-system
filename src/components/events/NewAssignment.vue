@@ -1,14 +1,16 @@
 <template>
   <div id="NewAssignment" class="small-container">
-    <h5>Add new assignment</h5>
+    <h1>Add new assignment</h1>
     <form @submit.prevent="handleSubmit">
       <label>Title </label>
+      <br/>
       <input
-        v-model="assignment.description"
+        v-model="assignment.projectName"
         type="text"
       >
       <br/><br/>
       <label>Start date </label>
+      <br/>
       <input
         v-model="assignment.startDate"
         type="date"
@@ -16,6 +18,7 @@
       >
       <br/><br/>
       <label>End date </label>
+      <br/>
       <input
         v-model="assignment.endDate"
         type="date"
@@ -24,9 +27,10 @@
       <br/><br/>
 
       <label>Project group </label>
+      <br/>
       <select v-model="assignment.projectGroup">
-        <option v-for="option in selectOptions" :value="option.id" v-bind:key="option.id">
-          {{option.group}}
+        <option v-for="option in selectOptions" :value="option.idPG" v-bind:key="option.idPG">
+          {{option.projectName}}
         </option>
       </select>
       <p v-if="error && submiting" class="error-message">
@@ -45,6 +49,8 @@
 </template>
 
 <script>
+import axios from "axios";
+
 export default {
   firstName: "NewAssignment",
   data() {
@@ -53,16 +59,12 @@ export default {
       error: false,
       success: false,
       assignment: {
-        description: '',
+        projectName: '',
         startDate: new Date().toISOString().slice(0,10),
         endDate: new Date().toISOString().slice(0,10),
-        projectGroup: 0
+        idPG: 0
       },
-      selectOptions: [
-        {group: 'A', id: 1},
-        {group: 'B', id: 2},
-        {group: 'C', id: 3},
-      ]
+      selectOptions: []
     }
   },
   methods: {
@@ -76,6 +78,27 @@ export default {
       this.error = false
       this.success = true
       this.submiting = false
+
+      this.addAssigment()
+
+      window.location.href = 'http://localhost:8080/calendar'
+
+    },
+    addAssigment() {
+      axios({
+        method: 'post',
+        url: 'http://localhost:8090/api/v1/assigment',
+        data: {
+          description: this.assignment.projectName,
+          startDate: this.assignment.startDate,
+          endDate: this.assignment.endDate,
+          isComplete: 0,
+          fk_projectGroup: this.assignment.idPG
+        }
+      }).catch(() => {
+        this.error = true
+        console.log("Błędne dane")
+      })
     },
     clearStatus() {
       this.success = false
@@ -86,22 +109,54 @@ export default {
     invalidDate() {
       const firstDate = new Date(this.assignment.startDate)
       const sencondDate = new Date(this.assignment.endDate);
-      return firstDate.getDate() >= sencondDate.getDate()
+      return  firstDate.getDate() > sencondDate.getDate()
     },
     invalidProjectGroup() {
-      return this.assignment.projectGroup === 0
+      return this.assignment.projectName === 0
     },
   },
+  mounted() {
+    axios.get('http://localhost:8090/api/v1/project-group/all').then(response => {
+      this.selectOptions = response.data
+    })
+  }
 }
 </script>
 
 <style scoped>
-#app {
+input, select {
+  width: 30%;
+  padding: 12px 20px;
+  margin: 8px 0;
+  display: inline-block;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box;
+}
+
+button {
+  width: 20%;
+  background-color: #55c21e;
+  color: white;
+  padding: 14px 20px;
+  margin: 8px 0;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+div {
+  border-radius: 5px;
+  background-color: #f2f2f2;
+  padding: 20px;
+}
+
+#NewAssignment {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  text-align: left;
-  color: #2c3e50;
+  text-align: center;
+  color: #26421b;
   margin-top: 60px;
 }
 form {
@@ -120,6 +175,8 @@ form {
   font-size: 20px;
 }
 #butt {
-  font-size: 15px;
+  font-size: 20px;
+  margin-top: 15px;
+  background-color: #3ba206;
 }
 </style>
